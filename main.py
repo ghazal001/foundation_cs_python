@@ -175,18 +175,27 @@ def admin_menu(L):
             admin_menu(L)
             
 
-def book_user_ticket():
-    pass
+def book_user_ticket(L,username):
+    event_id = int(input("Enter the event ID: "))
+    event_date = input("Enter the event date (yyyymmdd): ")
+    priority ="0"
+    highest_ticket_id = max([get_ticket_id(ticket) for ticket in L], default=0)    
+    ticket_id=int(highest_ticket_id) + 1
+    new_ticket=f"tick{ticket_id},ev{str(event_id)},{username},{event_date},{priority}"
+    L.append(new_ticket)
+    print("ticket booked successfully:")
+    for ticket in L:
+        print(ticket)
 
-def user_menu():
+def user_menu(username):
     while True:
         print("1.Book a ticket\n"+
-        "2.Exit")
+            "2.Exit")
         choice = int(input("Enter your choice (1 or 2):"))
-        if choice =="1":
+        if choice == 1:
             print("you want to book a ticket:\n")
-            book_user_ticket(L)
-        elif choice ==2:
+            book_user_ticket(L,username)
+        elif choice == 2:
             print("you are exiting the user menu:\n")
             break
         else:
@@ -202,7 +211,7 @@ def greet_start():
             admin_menu(L)
             break
         elif password=="":
-            user_menu()
+            user_menu(username)
             break
         else:
             counter=counter-1
