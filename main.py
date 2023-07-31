@@ -15,15 +15,13 @@ def priority_sorted(L):
     for x in range(len(L)):
         check_swap=False
         for y in range(len(L)-x-1):
-            if L[y].split(",")[4]>L[y+1].split(",")[4]:
+            if L[y].split(",")[4]<L[y+1].split(",")[4]:
                 check_swap=True
                 temp=L[y]
                 L[y]=L[y+1]
                 L[y+1]=temp
         if not check_swap:
             break
-    print("the sorted list is:",L)
-    print(L)
     return L
 
 
@@ -116,9 +114,26 @@ def disable_ticket(L,ticket_id):
     else:
         print(f"Ticket with ID {ticket_id} not found.")
 
+def display_today_events(L,date):
+    today_events=[event for event in L if event.split(",")[3] == date]
+    if not today_events:
+        print("there's no event for this date")
+        return
+    priority_sorted(today_events)
+    print("the events are sorted by priority:")
+    for event in today_events:
+        print(event)
 
-def run_events():
-    pass
+def run_events(L):
+    choosen_date="20230803"
+    priority_sorted(L)
+    display_today_events(L,choosen_date)
+    #remove these events from the list
+    L=[event for event in L if event.split(",")[3] !=choosen_date]
+    print("the list after we remove the today's events:")
+    for event in L:
+        print(event)
+    return L
 
 def admin_menu(L):
         while True:
@@ -151,7 +166,7 @@ def admin_menu(L):
                 disable_ticket(L,ticket_id)
             elif choice == 6:
                 print("You selected: Run Events")
-                run_events()
+                run_events(L)
             elif choice ==7:
                 print("you are exiting the admin menu:\n")
                 break
