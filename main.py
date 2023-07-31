@@ -1,18 +1,99 @@
-file= open('file.txt')
-L=list(file)
-file.close()
+#file= open('file.txt')
+#L=list(file)
+#file.close()
 
-def display_statistics():
-    pass
+def date_id_sorted(L):
+    for x in range(len(L)):
+        check_swap=False
+        for y in range(len(L)-x-1):
+            if L[y].split(",")[3]>L[y+1].split(",")[3] or (L[y].split(",")[3]==L[y+1].split(",")[3] and L[y].split(",")[1]>L[y+1].split(",")[1]):
+                check_swap=True
+                temp=L[y]
+                L[y]=L[y+1]
+                L[y+1]=temp
+        if not check_swap:
+            break
+    return L
 
-def book_Ticket():
-    pass
+def priority_sorted(L):
+    for x in range(len(L)):
+        check_swap=False
+        for y in range(len(L)-x-1):
+            if L[y].split(",")[4]>L[y+1].split(",")[4]:
+                check_swap=True
+                temp=L[y]
+                L[y]=L[y+1]
+                L[y+1]=temp
+        if not check_swap:
+            break
+    print("the sorted list is:",L)
+    print(L)
+    return L
 
-def display_ticket():
-    pass
 
-def change_priority():
-    pass
+
+
+def display_statistics(L):
+    #dictionary to store the nb of tickets for each events
+    tickets_events={}
+    for x in L:
+        parts=x.split(",")
+        event = parts[1]
+        if event in tickets_events:
+            tickets_events[event]+=1
+        else:
+            tickets_events[event]=1
+    max_tickets=max(tickets_events,key=tickets_events.get)
+    print("the Evenet with the highest number of tickets is:",max_tickets)
+    print("its number of tickets is :",tickets_events[max_tickets])
+
+def get_ticket_id(ticket):
+    return ticket.split(",")[0][4:]
+
+def book_ticket(L):
+    #highest id 
+    username = input("Enter your username: ")
+    event_id = int(input("Enter the event ID: "))
+    event_date = input("Enter the event date (yyyymmdd): ")
+    priority = int(input("Enter the priority: "))
+    
+    highest_ticket_id = max([get_ticket_id(ticket) for ticket in L], default=0)    
+    ticket_id=int(highest_ticket_id) + 1
+    new_ticket=f"tick{ticket_id},ev{str(event_id)},{username},{event_date},{priority}"
+    L.append(new_ticket)
+    print("ticket booked successfully:")
+    for ticket in L:
+        print(ticket)
+
+
+def display_ticket(L):
+    date_id_sorted(L)
+    print("the tickets registred in the system are:")
+    for ticket in L:
+        parts=ticket.split(",")
+        ticket_date=parts[3]
+        ticket_year=ticket_date[0:4]
+        if int(ticket_year)>=2023:
+            print(ticket)
+
+
+def change_priority(L,ticket_id,new_priority):
+    ticket_new_priority=""
+    for i, ticket in enumerate(L):
+        parts = ticket.split(",")
+        current_ticket_id = int(parts[0][4:])
+        if current_ticket_id == ticket_id:
+            # Update the priority of the ticket
+            parts[-1] = str(new_priority)
+            L[i] = ",".join(parts)
+            ticket_new_priority=L[i]
+            break
+    if ticket_new_priority!="":
+        print("priority changed successfully")
+        print(ticket_new_priority)
+    else:
+        print(f"Ticket with ID {ticket_id} not found.")
+
 
 def disable_ticket():
     pass
@@ -20,8 +101,8 @@ def disable_ticket():
 def run_events():
     pass
 
-def admin_menu():
-        
+def admin_menu(L):
+        while True:
             print("choose one of the below options Admin:\n")
             print("1.Display Statistics\n"+
                 "2.Book a Ticket\n"+
@@ -31,57 +112,71 @@ def admin_menu():
                 "6.Run Events\n"+
                 "7.Exit")
             choice = eval(input("Enter your choice (1-7):"))
-            while choice!=7:
-                if choice == "1":
-                    print("You selected: Display Statistics")
-                    display_statistics()
-                elif choice == "2":
-                    print("You selected: Book a Ticket")
-                    book_Ticket()
-                elif choice == "3":
-                    print("You selected: Display all Tickets")
-                    display_ticket()
-                elif choice == "4":
-                    print("You selected: Change Tickets Priority")
-                    change_priority()
-                elif choice == "5":
-                    print("you selected: Disable Ticket")
-                    disable_ticket()
-                elif choice == "6":
-                    print("You selected: Run Events")
-                    run_events()
-            print("you are exiting the admin menu:\n")
+            if choice == 1:
+                print("You selected: Display Statistics")
+                display_statistics(L)
+            elif choice == 2:
+                print("You selected: Book a Ticket")
+                book_ticket(L)
+            elif choice == 3:
+                print("You selected: Display all Tickets")
+                display_ticket(L)
+            elif choice == 4:
+                print("You selected: Change Tickets Priority")
+                ticket_id=int(input("Enter the ticket ID to change priority:"))
+                new_priority=int(input("enter the new priority:"))
+                change_priority(L,ticket_id,new_priority)
+            elif choice == 5:
+                print("you selected: Disable Ticket")
+                disable_ticket()
+            elif choice == 6:
+                print("You selected: Run Events")
+                run_events()
+            elif choice ==7:
+                print("you are exiting the admin menu:\n")
+                break
+            else:
+                print("your choice is invalid.try again")
+            admin_menu(L)
+            
 
-def book_ticket():
+def book_user_ticket():
     pass
 
 def user_menu():
-    
-    print("1.Book a ticket\n"+
+    while True:
+        print("1.Book a ticket\n"+
         "2.Exit")
-    choice = eval(input("Enter your choice (1 or 2):"))
-    while choice!=2:
+        choice = int(input("Enter your choice (1 or 2):"))
         if choice =="1":
             print("you want to book a ticket:\n")
-            book_ticket()
-    print("you are exiting the user menu:\n")
-
+            book_user_ticket(L)
+        elif choice ==2:
+            print("you are exiting the user menu:\n")
+            break
+        else:
+            print("Invalid choice,please try again (1 or 2)")
 
 def greet_start():
-    max=5
-    while max>0:
+    counter=5
+    while counter>0:
         username=str(input("enter your username:"))
         password=input("enter your password:")
 
-        if username=="admin" and password=="admin123123":
-            admin_menu()
+        if username == "admin" and password == "admin123123":
+            admin_menu(L)
             break
         elif password=="":
             user_menu()
             break
         else:
-            max=max-1
-            print("Incorrect Username and/or password")
-    if max==0:
-        print("you tried more than 5 times so exiting")
+            counter=counter-1
+            print("Incorrect Username and/or password!!")
+    if counter==0:
+        print("you tried more than 5 times so exiting!!")
+
+with open('file.txt') as file:
+    L=list(file)
+
 greet_start()
+
