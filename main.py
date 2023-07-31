@@ -1,7 +1,3 @@
-#file= open('file.txt')
-#L=list(file)
-#file.close()
-
 def date_id_sorted(L):
     for x in range(len(L)):
         check_swap=False
@@ -76,27 +72,50 @@ def display_ticket(L):
         if int(ticket_year)>=2023:
             print(ticket)
 
+def find_ticket_id(L,ticket_id):
+    for ticket in L:
+        parts=ticket.split(",")
+        current_ticket_id=int(parts[0][4:])
+        if current_ticket_id==ticket_id:
+            return ticket_id
+    return None
+
+
 
 def change_priority(L,ticket_id,new_priority):
+    ticket_id_found=find_ticket_id(L,ticket_id)
     ticket_new_priority=""
-    for i, ticket in enumerate(L):
-        parts = ticket.split(",")
-        current_ticket_id = int(parts[0][4:])
-        if current_ticket_id == ticket_id:
+    if ticket_id_found is not None:
+        for i, ticket in enumerate(L):
+            parts = ticket.split(",")
+            #current_ticket_id = int(parts[0][4:])
+            #if current_ticket_id == ticket_id:
             # Update the priority of the ticket
             parts[-1] = str(new_priority)
             L[i] = ",".join(parts)
             ticket_new_priority=L[i]
             break
-    if ticket_new_priority!="":
-        print("priority changed successfully")
-        print(ticket_new_priority)
+        if ticket_new_priority!="":
+            print("priority changed successfully")
+            print(ticket_new_priority)
     else:
         print(f"Ticket with ID {ticket_id} not found.")
 
 
-def disable_ticket():
-    pass
+def disable_ticket(L,ticket_id):
+    ticket_id_found=find_ticket_id(L,ticket_id)
+    if ticket_id_found is not None:
+        for i,ticket in enumerate(L):
+            parts=ticket.split(",")
+            current_ticket_id=int(parts[0][4:])
+            if current_ticket_id == ticket_id:
+                del L[i]
+                break
+        print("the ticket is removed successfully:  \n")
+        print("the new list without the removed ticket is :",L)
+    else:
+        print(f"Ticket with ID {ticket_id} not found.")
+
 
 def run_events():
     pass
@@ -111,7 +130,7 @@ def admin_menu(L):
                 "5.Disable Ticket\n"
                 "6.Run Events\n"+
                 "7.Exit")
-            choice = eval(input("Enter your choice (1-7):"))
+            choice = int(input("Enter your choice (1-7):"))
             if choice == 1:
                 print("You selected: Display Statistics")
                 display_statistics(L)
@@ -128,7 +147,8 @@ def admin_menu(L):
                 change_priority(L,ticket_id,new_priority)
             elif choice == 5:
                 print("you selected: Disable Ticket")
-                disable_ticket()
+                ticket_id=int(input("Enter the ticket ID to remove it from the list:"))
+                disable_ticket(L,ticket_id)
             elif choice == 6:
                 print("You selected: Run Events")
                 run_events()
