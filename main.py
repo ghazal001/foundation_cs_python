@@ -1,3 +1,5 @@
+from datetime import date
+
 #this fct will sort the list by the date or by the id 
 #worst case=>O(N^2)
 def date_id_sorted(L):
@@ -96,10 +98,12 @@ def find_ticket_index(L,ticket_id):
 
 #will change the priority of the found ticket and added back to the list
 #worst case=>O(N)
-def change_priority(L,ticket_id,new_priority):
+def change_priority(L):
+    ticket_id=int(input("Enter the ticket ID to change priority:"))
     ticket_index=find_ticket_index(L,ticket_id)
     
     if ticket_index is not None:
+            new_priority=int(input("enter the new priority:"))
             ticket=L[ticket_index]
             parts = ticket.split(",")
             # Update the priority of the ticket
@@ -118,7 +122,7 @@ def disable_ticket(L,ticket_id):
     if ticket_index is not None:
         del L[ticket_index]
         print("the ticket is removed successfully:  \n")
-        print("the new list without the removed ticket is :",L)
+    #print("the new list without the removed ticket is :",L)
     else:
         print(f"Ticket with ID {ticket_id} not found.")
 
@@ -136,9 +140,11 @@ def display_today_events(L,date):
 #will delete the today's event from the list after we display it 
 #worst case=>nlogn
 def run_events(L):
-    choosen_date="20230803"
+    today=date.today()
+    choosen_date=today.strftime("%Y%m%d")
+    #choosen_date="20230803"
     display_today_events(L,choosen_date)
-    priority_sorted(L)
+    #priority_sorted(L)
     #remove these events from the list
     L=[event for event in L if event.split(",")[3] !=choosen_date]
     print("the list after we remove the today's events:")
@@ -169,9 +175,7 @@ def admin_menu(L):
                 display_ticket(L)
             elif choice == 4:
                 print("You selected: Change Tickets Priority")
-                ticket_id=int(input("Enter the ticket ID to change priority:"))
-                new_priority=int(input("enter the new priority:"))
-                change_priority(L,ticket_id,new_priority)
+                change_priority(L)
             elif choice == 5:
                 print("you selected: Disable Ticket")
                 ticket_id=int(input("Enter the ticket ID to remove it from the list:"))
@@ -229,7 +233,9 @@ def greet_start():
             break
         else:
             counter=counter-1
+            print("-------------------------------------------------------------------")
             print("Incorrect Username and/or password!!")
+            print("-------------------------------------------------------------------")
     if counter==0:
         print("you tried more than 5 times so exiting!!")
 #open the file we want to impor from it the elemeent and while using the with it's automatically close it 

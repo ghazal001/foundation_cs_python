@@ -1,8 +1,8 @@
-tick12,ev03,sass,20230802,0
+tick12,ev03,sass,20230801,0
 tick13,ev04,khal,20230802,0
 tick31,ev02,elie,20230804,10
 tick33,ev04,fariha,20230804,11
-tick40,ev01,samar,20230805,11
+tick40,ev01,samar,20230801,11
 tick42,ev03,jad,20220805,2
 tick32,ev03,kazem,20230804,3
 tick20,ev01,moe,20230803,35
@@ -20,3 +20,4 @@ tick14,ev01,jid,202230802,6
 tick24,ev01,jido,202230803,6
 tick10,ev01,ghaz,20230802,8
 tick21,ev02,sam,20230803,9
+tick66,ev8,ghazallll,20230923,0
